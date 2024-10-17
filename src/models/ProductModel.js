@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+
 const productSchema = new mongoose.Schema({
     idPro: { type: Number, required: true, unique: true },
     namePro: { type: String, required: true },
@@ -10,11 +11,13 @@ const productSchema = new mongoose.Schema({
     memoryPro: { type: String },
     ramPro: { type: String },
     statusPro: { type: String },
-    idType: { type: mongoose.Schema.Types.Number, ref: 'TypePro', required: true }, // FK đến bảng TypePro
-    idAD: { type: mongoose.Schema.Types.Number, ref: 'Admin', required: true } // FK đến bảng Admin
+    ngaySanXuat: { type: Date, required: true }, // Ngày sản xuất
+    baoHanh: { type: Number, required: true }, // Thời gian bảo hành (tính theo tháng)
+    idType: { type: mongoose.Schema.Types.ObjectId, ref: 'TypePro', required: true }, // FK đến bảng TypePro
+    idAD: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin', required: true } // FK đến bảng Admin
 }, {
     timestamps: true
-}
-);
+});
+
 const Products = mongoose.model("Products", productSchema);
 module.exports = Products;
