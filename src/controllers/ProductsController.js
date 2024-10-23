@@ -103,10 +103,44 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+
+const getProductDetail = async (req, res) => {
+    try {
+        const productId = req.params.idPro; // Lấy idPro từ request params
+        // Không populate idAD, chỉ populate idType nếu cần hiển thị chi tiết type
+        const product = await Product.findOne({ idPro: productId }).populate('idType'); 
+
+        if (!product) {
+            return res.status(404).json({
+                status: 'ERR',
+                message: 'Sản phẩm không tồn tại'
+            });
+        }
+
+        return res.status(200).json({
+            status: 'OK',
+            message: 'Lấy chi tiết sản phẩm thành công',
+            data: {
+                ...product._doc, // Dùng _doc để lấy dữ liệu gốc
+                idAD: product.idAD // Trả về chỉ idAD thay vì toàn bộ object
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi lấy chi tiết sản phẩm:', error);
+        return res.status(500).json({
+            status: 'ERR',
+            message: 'Đã xảy ra lỗi khi lấy chi tiết sản phẩm'
+        });
+    }
+};
+
+
+
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getProductDetail
 };

@@ -8,5 +8,7 @@ router.get('/get', ProductsController.getAllProducts);
 router.get('/getbyid/:idPro', ProductsController.getProductById);
 router.put('/update/:idPro', ProductsController.updateProduct);
 router.delete('/delete/:idPro', ProductsController.deleteProduct);
+// API xem chi tiết sản phẩm theo ID
+router.get('proDetail/:idPro', ProductsController.getProductDetail);
 
 module.exports = router;

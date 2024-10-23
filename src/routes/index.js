@@ -8,7 +8,7 @@ const CusRouter = require('./CusRouter'); // Import CusRouter
 const AdminRouter = require('./AdminRouter'); 
 
 const routes = (app)=>{
-    app.use('/api/user',UserRouter)
+    app.use('/api/user',UserRouter) //user = account
     app.use('/api/account-type', AccountTypeRouter); // Thêm router cho AccountType
     app.use('/api/typepro', typeProRouter);
     app.use('/api/products', productsRouter);

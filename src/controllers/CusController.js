@@ -14,8 +14,11 @@ const createCus = async (req, res) => {
         return res.status(500).json({
             status: 'ERR',
             message: 'Đã xảy ra lỗi khi tạo khách hàng'
+            
         });
+        
     }
+    
 };
 
 // Lấy tất cả khách hàng

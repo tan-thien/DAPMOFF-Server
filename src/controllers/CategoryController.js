@@ -26,6 +26,7 @@ const getAllCategories = async (req, res) => {
             data: categories
         });
     } catch (error) {
+        console.error(error);  // Thêm dòng này để xem chi tiết lỗi
         return res.status(500).json({
             status: 'ERR',
             message: 'Đã xảy ra lỗi khi lấy danh sách danh mục'

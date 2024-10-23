@@ -6,7 +6,7 @@ const Cus = require('../models/CusModel');
 const validateInput = (req, res, isLogin = false) => {
     const { nameAcc, password, confirmPassword, idAccType } = req.body;
 
-    if (!nameAcc || !password || (isLogin ? false : !confirmPassword) || !idAccType) {
+    if (!nameAcc || !password || (isLogin ? false : !confirmPassword)) {
         return res.status(400).json({
             status: "ERR",
             message: 'Tất cả thông tin là bắt buộc, ngoại trừ idAcc'

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Counter = require('./Counter'); // Đường dẫn đến model Counter
 
 const productSchema = new mongoose.Schema({
     idPro: { type: Number, required: true, unique: true },
@@ -19,5 +20,20 @@ const productSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Products = mongoose.model("Products", productSchema);
+// Middleware để tự động tăng idPro
+productSchema.pre('save', async function (next) {
+    if (this.isNew) {
+        const counter = await Counter.findOneAndUpdate(
+            { collectionName: 'Products' },
+            { $inc: { sequenceValue: 1 } },
+            { new: true, upsert: true }
+        );
+
+        this.idPro = counter.sequenceValue; // Gán giá trị ID tự động tăng
+    }
+    next();
+});
+
+// Kiểm tra xem model đã tồn tại chưa, nếu chưa thì tạo mới
+const Products = mongoose.models.Products || mongoose.model("Products", productSchema);
 module.exports = Products;
