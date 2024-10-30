@@ -16,6 +16,7 @@ const routes = (app)=>{
     app.use('/api/categories', categoryRouter);
     app.use('/api/customers', CusRouter);
     app.use('/api/admins', AdminRouter);
+
 }
 
 module.exports = routes

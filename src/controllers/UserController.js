@@ -3,21 +3,34 @@ const UserService = require('../services/UserService');
 const Cus = require('../models/CusModel');
 
 // Hàm kiểm tra đầu vào chung
+// Hàm kiểm tra đầu vào chung
 const validateInput = (req, res, isLogin = false) => {
     const { nameAcc, password, confirmPassword, idAccType } = req.body;
 
-    if (!nameAcc || !password || (isLogin ? false : !confirmPassword)) {
-        return res.status(400).json({
-            status: "ERR",
-            message: 'Tất cả thông tin là bắt buộc, ngoại trừ idAcc'
-        });
-    }
+    // Kiểm tra đầu vào cho đăng nhập
+    if (isLogin) {
+        if (!nameAcc || !password) {
+            return res.status(400).json({
+                status: "ERR",
+                message: 'Tất cả thông tin là bắt buộc cho đăng nhập.'
+            });
+        }
+    } else {
+        // Kiểm tra đầu vào cho việc tạo tài khoản
+        if (!nameAcc || !password || !confirmPassword) {
+            return res.status(400).json({
+                status: "ERR",
+                message: 'Tất cả thông tin là bắt buộc, ngoại trừ idAcc.'
+            });
+        }
 
-    if (!isLogin && password !== confirmPassword) {
-        return res.status(400).json({
-            status: "ERR",
-            message: 'Mật khẩu và xác nhận mật khẩu không khớp'
-        });
+        // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp nhau không
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                status: "ERR",
+                message: 'Mật khẩu và xác nhận mật khẩu không khớp.'
+            });
+        }
     }
 
     return null; // Không có lỗi
@@ -46,6 +59,7 @@ const createUser = async (req, res) => {
         });
     }
 };
+
 
 // Đăng nhập người dùng
 const loginUser = async (req, res) => {

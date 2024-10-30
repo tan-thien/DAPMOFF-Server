@@ -1,21 +1,32 @@
 const CategoryService = require('../services/CategoryService');
+const multer = require('multer');
+const upload = require('../config/multerConfig'); // Import multer config
 
+// Tạo Category
 // Tạo Category
 const createCategory = async (req, res) => {
     try {
-        const newCategory = await CategoryService.createCategory(req.body);
+        const data = {
+            nameCate: req.body.nameCate,
+            statusCate: req.body.statusCate,
+            imageCate: req.file ? req.file.path : null // Lưu đường dẫn file
+        };
+
+        const newCategory = await CategoryService.createCategory(data); // Gọi hàm tạo danh mục
         return res.status(201).json({
             status: 'OK',
             message: 'Tạo danh mục thành công',
             data: newCategory
         });
     } catch (error) {
+        console.error(error);  // Hiển thị chi tiết lỗi trong logs
         return res.status(500).json({
             status: 'ERR',
             message: 'Đã xảy ra lỗi khi tạo danh mục'
         });
     }
 };
+
 
 // Lấy tất cả Category
 const getAllCategories = async (req, res) => {
@@ -80,6 +91,9 @@ const updateCategory = async (req, res) => {
         });
     }
 };
+
+
+
 
 // Xóa Category
 const deleteCategory = async (req, res) => {

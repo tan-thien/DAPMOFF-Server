@@ -1,35 +1,63 @@
-const Category = require('../models/CategoryModel');
+const Category = require("../models/CategoryModel");
 
-// Tạo Category mới
-const createCategory = async (data) => {
-    const category = new Category(data);
-    return await category.save();
-};
-
-// Lấy tất cả Category
-const getAllCategories = async () => {
-    return await Category.find().populate('idAD');
-};
-
-// Lấy Category theo id
-const getCategoryById = async (idCate) => {
-    return await Category.findById(idCate).populate('idAD');
+// Tạo Category
+const createCategory = async (newCategory) => {
+    try {
+        const createdCategory = await Category.create(newCategory);
+        return {
+            status: 'OK',
+            message: 'Tạo danh mục thành công',
+            data: createdCategory
+        };
+    } catch (error) {
+        throw new Error('Lỗi khi tạo danh mục: ' + error.message);
+    }
 };
 
 // Cập nhật Category
-const updateCategory = async (idCate, data) => {
-    return await Category.findByIdAndUpdate(idCate, data, { new: true });
+const updateCategory = async (idCate, updateData) => {
+    try {
+        const updatedCategory = await Category.findOneAndUpdate({ idCate }, updateData, { new: true });
+        return updatedCategory;
+    } catch (error) {
+        throw new Error('Lỗi khi cập nhật danh mục: ' + error.message);
+    }
 };
 
 // Xóa Category
 const deleteCategory = async (idCate) => {
-    return await Category.findByIdAndDelete(idCate);
+    try {
+        const deletedCategory = await Category.findOneAndDelete({ idCate });
+        return deletedCategory;
+    } catch (error) {
+        throw new Error('Lỗi khi xóa danh mục: ' + error.message);
+    }
+};
+
+// Lấy Category theo ID
+const getCategoryById = async (idCate) => {
+    try {
+        const category = await Category.findOne({ idCate });
+        return category;
+    } catch (error) {
+        throw new Error('Lỗi khi lấy danh mục: ' + error.message);
+    }
+};
+
+// Lấy tất cả Category
+const getAllCategories = async () => {
+    try {
+        const categories = await Category.find({});
+        return categories; // Trả về danh sách các danh mục
+    } catch (error) {
+        throw new Error('Lỗi khi lấy danh sách danh mục: ' + error.message);
+    }
 };
 
 module.exports = {
     createCategory,
-    getAllCategories,
-    getCategoryById,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    getCategoryById,
+    getAllCategories
 };

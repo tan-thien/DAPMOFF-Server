@@ -1,35 +1,55 @@
 const TypePro = require('../models/TypeProModel');
 
-// Tạo TypePro mới
 const createTypePro = async (data) => {
-    const typePro = new TypePro(data);
-    return await typePro.save();
+    try {
+        const newTypePro = await TypePro.create(data);
+        return newTypePro;
+    } catch (error) {
+        throw new Error('Lỗi khi tạo TypePro: ' + error.message);
+    }
 };
 
-// Lấy tất cả TypePro
+const updateTypePro = async (idType, updateData) => {
+    try {
+        const updatedTypePro = await TypePro.findOneAndUpdate({ idType }, updateData, { new: true });
+        return updatedTypePro;
+    } catch (error) {
+        throw new Error('Lỗi khi cập nhật TypePro: ' + error.message);
+    }
+};
+
+const deleteTypePro = async (idType) => {
+    try {
+        console.log('Trying to delete TypePro with idType:', idType); // Ghi log giá trị idType
+        const deletedTypePro = await TypePro.findOneAndDelete({ idType });
+        return deletedTypePro;
+    } catch (error) {
+        throw new Error('Lỗi khi xóa TypePro: ' + error.message);
+    }
+};
+
+const getTypeProById = async (idType) => {
+    try {
+        const typePro = await TypePro.findOne({ idType });
+        return typePro;
+    } catch (error) {
+        throw new Error('Lỗi khi lấy TypePro: ' + error.message);
+    }
+};
+
 const getAllTypePros = async () => {
-    return await TypePro.find();
-};
-
-// Lấy TypePro theo id
-const getTypeProById = async (idTypePro) => {
-    return await TypePro.findById(idTypePro);
-};
-
-// Cập nhật TypePro
-const updateTypePro = async (idTypePro, data) => {
-    return await TypePro.findByIdAndUpdate(idTypePro, data, { new: true });
-};
-
-// Xóa TypePro
-const deleteTypePro = async (idTypePro) => {
-    return await TypePro.findByIdAndDelete(idTypePro);
+    try {
+        const typePros = await TypePro.find({});
+        return typePros;
+    } catch (error) {
+        throw new Error('Lỗi khi lấy danh sách TypePro: ' + error.message);
+    }
 };
 
 module.exports = {
     createTypePro,
-    getAllTypePros,
-    getTypeProById,
     updateTypePro,
-    deleteTypePro
+    deleteTypePro,
+    getTypeProById,
+    getAllTypePros
 };
