@@ -16,7 +16,7 @@ const accountSchema = new mongoose.Schema({
     password: { type: String, required: true },
     dateRegister: { type: Date, default: Date.now }, // Thêm giá trị mặc định cho dateRegister
     status: { type: String },
-    idAccType: { type: mongoose.Schema.Types.ObjectId, ref: 'AccountType', required: true }
+    idAccType: { type: Number,required: true }
 }, {
     timestamps: true
 });

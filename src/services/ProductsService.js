@@ -8,22 +8,22 @@ const createProduct = async (data) => {
 
 // Lấy tất cả Product
 const getAllProducts = async () => {
-    return await Products.find().populate('idType').populate('idAD');
+    return await Products.find().populate('idType');
 };
 
 // Lấy Product theo id
-const getProductById = async (idPro) => {
-    return await Products.findById(idPro).populate('idType').populate('idAD');
+const getProductById = async (id) => {
+    return await Products.findById(id).populate('idType');
 };
 
 // Cập nhật Product
-const updateProduct = async (idPro, data) => {
-    return await Products.findByIdAndUpdate(idPro, data, { new: true });
+const updateProduct = async (id, data) => {
+    return await Products.findByIdAndUpdate(id, data, { new: true });
 };
 
 // Xóa Product
-const deleteProduct = async (idPro) => {
-    return await Products.findByIdAndDelete(idPro);
+const deleteProduct = async (id) => {
+    return await Products.findByIdAndDelete(id);
 };
 
 module.exports = {

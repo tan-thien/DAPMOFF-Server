@@ -6,6 +6,7 @@ const voucherRouter = require('./VoucherRouter');
 const categoryRouter = require('./CategoryRouter');
 const CusRouter = require('./CusRouter'); // Import CusRouter
 const AdminRouter = require('./AdminRouter'); 
+const authRoutes = require('./authRoutes');
 
 const routes = (app)=>{
     app.use('/api/user',UserRouter) //user = account
@@ -16,6 +17,7 @@ const routes = (app)=>{
     app.use('/api/categories', categoryRouter);
     app.use('/api/customers', CusRouter);
     app.use('/api/admins', AdminRouter);
+    app.use('/api/auth', authRoutes);
 
 }
 

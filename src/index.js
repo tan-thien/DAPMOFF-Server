@@ -4,6 +4,7 @@ const routes = require('./routes/')
 const cors = require('cors')
 const  mongoose  = require("mongoose");
 const bodyParser = require("body-parser");
+const path = require('path');
 
 dotenv.config()
 
@@ -13,6 +14,10 @@ const port =process.env.PORT || 3001
 
 app.use(cors())
 app.use(bodyParser.json())
+
+
+// Cấu hình đường dẫn tĩnh cho uploads
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'))); // Thay đổi đường dẫn ở đây
 
 routes(app);
 

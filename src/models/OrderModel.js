@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 const Counter = require('./Counter');
 
 const orderSchema = new mongoose.Schema({
-    idOrder: { type: Number, required: true, unique: true },
+
     statusOrd: { type: String },
     addressOrd: { type: String },
     phoneOrd: { type: String },
-    bookingDate: { type: Date },
+    bookingDate: { type: Date, default: Date.now },
     deliveryDate: { type: Date },
     note: { type: String },
     totalPrice: { type: Number },

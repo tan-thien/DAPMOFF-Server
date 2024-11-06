@@ -1,19 +1,33 @@
 const ProductsService = require('../services/ProductsService');
+const Product = require('../models/ProductModel'); 
 
 // Tạo Product
 const createProduct = async (req, res) => {
+    console.log('Request Body:', req.body); 
     try {
-        const newProduct = await ProductsService.createProduct(req.body);
-        return res.status(201).json({
-            status: 'OK',
-            message: 'Tạo sản phẩm thành công',
-            data: newProduct
+        const { namePro, descriptionPro, quantityPro, colorPro, pricePro, memoryPro, ramPro, statusPro, ngaySanXuat, baoHanh, idType } = req.body;
+        const imagePro = req.file ? req.file.path : ''; // Lấy đường dẫn file nếu ảnh được tải lên
+
+        const newProduct = new Product({
+            namePro,
+            imagePro: req.file.path, // Nếu bạn đang lưu đường dẫn hình ảnh
+            descriptionPro,
+            quantityPro: Number(quantityPro), // Chuyển đổi quantityPro thành số
+            colorPro,
+            pricePro: Number(pricePro), // Chuyển đổi pricePro thành số
+            memoryPro,
+            ramPro,
+            statusPro,
+            ngaySanXuat,
+            baoHanh: Number(baoHanh), // Chuyển đổi baoHanh thành số
+            idType
         });
+
+        await newProduct.save();
+        res.status(201).json(newProduct);
     } catch (error) {
-        return res.status(500).json({
-            status: 'ERR',
-            message: 'Đã xảy ra lỗi khi tạo sản phẩm'
-        });
+        console.error('Error creating product:', error);
+        res.status(500).json({ error: 'Failed to create product' });
     }
 };
 
@@ -36,8 +50,8 @@ const getAllProducts = async (req, res) => {
 // Lấy Product theo id
 const getProductById = async (req, res) => {
     try {
-        const { idPro } = req.params;
-        const product = await ProductsService.getProductById(idPro);
+        const { id } = req.params;
+        const product = await ProductsService.getProductById(id);
         if (!product) {
             return res.status(404).json({
                 status: 'ERR',
@@ -59,8 +73,8 @@ const getProductById = async (req, res) => {
 // Cập nhật Product
 const updateProduct = async (req, res) => {
     try {
-        const { idPro } = req.params;
-        const updatedProduct = await ProductsService.updateProduct(idPro, req.body);
+        const { id } = req.params;
+        const updatedProduct = await ProductsService.updateProduct(id, req.body);
         if (!updatedProduct) {
             return res.status(404).json({
                 status: 'ERR',
@@ -83,8 +97,8 @@ const updateProduct = async (req, res) => {
 // Xóa Product
 const deleteProduct = async (req, res) => {
     try {
-        const { idPro } = req.params;
-        const deletedProduct = await ProductsService.deleteProduct(idPro);
+        const { id } = req.params;
+        const deletedProduct = await ProductsService.deleteProduct(id);
         if (!deletedProduct) {
             return res.status(404).json({
                 status: 'ERR',
@@ -103,44 +117,10 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-
-const getProductDetail = async (req, res) => {
-    try {
-        const productId = req.params.idPro; // Lấy idPro từ request params
-        // Không populate idAD, chỉ populate idType nếu cần hiển thị chi tiết type
-        const product = await Product.findOne({ idPro: productId }).populate('idType'); 
-
-        if (!product) {
-            return res.status(404).json({
-                status: 'ERR',
-                message: 'Sản phẩm không tồn tại'
-            });
-        }
-
-        return res.status(200).json({
-            status: 'OK',
-            message: 'Lấy chi tiết sản phẩm thành công',
-            data: {
-                ...product._doc, // Dùng _doc để lấy dữ liệu gốc
-                idAD: product.idAD // Trả về chỉ idAD thay vì toàn bộ object
-            }
-        });
-    } catch (error) {
-        console.error('Lỗi khi lấy chi tiết sản phẩm:', error);
-        return res.status(500).json({
-            status: 'ERR',
-            message: 'Đã xảy ra lỗi khi lấy chi tiết sản phẩm'
-        });
-    }
-};
-
-
-
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
     updateProduct,
-    deleteProduct,
-    getProductDetail
+    deleteProduct
 };
